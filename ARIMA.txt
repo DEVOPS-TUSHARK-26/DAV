@@ -1,0 +1,32 @@
+import pandas as pd
+import numpy as np
+import statsmodels.api as sm
+from statsmodels.tsa.arima.model import ARIMA
+import matplotlib.pyplot as plt
+
+# load data
+data = pd.read_csv('data.csv', index_col='Date', parse_dates=True)
+
+# create ARIMA model
+arima_model = ARIMA(data, order=(1, 1, 1)) # specify the order of ARIMA model (p,d,q)
+
+# fit ARIMA model
+results = arima_model.fit()
+
+# print summary of ARIMA model
+print(results.summary())
+
+# plot residuals of ARIMA model
+residuals = pd.DataFrame(results.resid)
+residuals.plot()
+plt.show()
+
+# plot actual vs predicted values of ARIMA model
+predicted = pd.DataFrame(results.predict(start='2022-01-01', end='2022-12-31'))
+predicted.columns = ['predicted']
+actual = pd.DataFrame(data['Value'])
+actual.columns = ['actual']
+plt.plot(actual.index, actual['actual'], label='actual')
+plt.plot(predicted.index, predicted['predicted'], label='predicted')
+plt.legend()
+plt.show()

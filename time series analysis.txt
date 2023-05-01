@@ -1,0 +1,10 @@
+time<- read.csv(file.choose(), header = TRUE)
+time
+class(time)
+
+#convert our data to timeseries
+timets<-ts(time$Scores, start = 2004, end = 2010, frequency=4)
+timets
+class(timets)
+plot(timets)
+lines(timets)
